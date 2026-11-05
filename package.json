@@ -1,0 +1,12 @@
+{
+  "name": "vanitylab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "bot": "node --env-file=.env bot.mjs",
+    "check": "node --check server.mjs && node --check bot.mjs && node --check public/app.js && node --check public/worker.js",
+    "telegram": "node telegram-test.mjs"
+  }
+}
