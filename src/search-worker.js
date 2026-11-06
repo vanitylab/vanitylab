@@ -1,0 +1,6 @@
+import sodium from 'libsodium-wrappers';
+const alphabet='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+export function encode(bytes){let n=0n;for(const b of bytes)n=n*256n+BigInt(b);let s='';while(n){s=alphabet[Number(n%58n)]+s;n/=58n;}for(const b of bytes){if(b)break;s='1'+s;}return s;}
+self.onmessage=async({data})=>{try{await sodium.ready;const target=data.flex?data.pattern.toLowerCase():data.pattern;const modulus=58**target.length;let count=0,last=performance.now();while(true){const pair=sodium.crypto_sign_keypair();let candidate;
+if(data.position==='end'){let remainder=0;for(const b of pair.publicKey)remainder=(remainder*256+b)%modulus;candidate='';for(let i=0;i<target.length;i++){candidate=alphabet[remainder%58]+candidate;remainder=Math.floor(remainder/58);}}else candidate=encode(pair.publicKey).slice(0,target.length);
+count++;if((data.flex?candidate.toLowerCase():candidate)===target){const address=encode(pair.publicKey);self.postMessage({type:'found',address,secret:encode(pair.privateKey),count});sodium.memzero(pair.privateKey);return;}sodium.memzero(pair.privateKey);if((count&255)===0&&performance.now()-last>500){self.postMessage({type:'progress',count});last=performance.now();}}}catch{self.postMessage({type:'error',message:'Unable to start the fast local generator. Try updating Telegram or your browser.'});}};
