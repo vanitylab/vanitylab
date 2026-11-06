@@ -7,6 +7,15 @@
     "start": "node server.mjs",
     "bot": "node --env-file=.env bot.mjs",
     "check": "node --check server.mjs && node --check bot.mjs && node --check public/app.js && node --check public/worker.js",
-    "telegram": "node telegram-test.mjs"
+    "telegram": "node telegram-test.mjs",
+    "bot:production": "node bot.mjs",
+    "build:worker": "node build-worker.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12",
+    "libsodium-wrappers": "0.8.4"
   }
 }
